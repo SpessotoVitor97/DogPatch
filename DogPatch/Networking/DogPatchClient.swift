@@ -26,34 +26,14 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import XCTest
-@testable import DogPatch
+import Foundation
 
-class DogPatchClientTests: XCTestCase {
+class DogPatchClient {
+  let baseURL: URL
+  let session: URLSession
   
-  var sut: DogPatchClient!
-  var baseURL: URL!
-  var session: URLSession!
-  
-    override func setUp() {
-      super.setUp()
-      baseURL = URL(string: "https://example.com/api/v1/")!
-      session = URLSession.shared
-      sut = DogPatchClient(baseURL: baseURL, session: session)
-    }
-
-    override func tearDown() {
-      baseURL = nil
-      session = nil
-      sut = nil
-      super.tearDown()
-    }
-  
-  func test_init_sets_baseURL() {
-    XCTAssertEqual(sut.baseURL, baseURL)
-  }
-  
-  func test_init_sets_session() {
-    XCTAssertEqual(sut.session, session)
+  init(baseURL: URL, session: URLSession) {
+    self.baseURL = baseURL
+    self.session = session
   }
 }

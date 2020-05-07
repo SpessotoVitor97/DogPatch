@@ -44,6 +44,7 @@
 		42D837B322B6CE2D0036C5DD /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D837B222B6CE2D0036C5DD /* Dog.swift */; };
 		42D837BE22B6DAD50036C5DD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D837BD22B6DAD50036C5DD /* User.swift */; };
 		42D837C922B6E80A0036C5DD /* TestLogoNavigationBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42D837C822B6E80A0036C5DD /* TestLogoNavigationBar.xib */; };
+		8838D35B2464AD8C0037A98A /* DogPatchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8838D35A2464AD8C0037A98A /* DogPatchClient.swift */; };
 		88D8A9772464AAC20094DBB0 /* DogPatchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D8A9762464AAC20094DBB0 /* DogPatchClientTests.swift */; };
 		9581B4AC2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9581B4AA2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift */; };
 		9581B4AD2316F32D00A78286 /* StoryboardCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9581B4AB2316F32D00A78286 /* StoryboardCreatable.swift */; };
@@ -107,6 +108,7 @@
 		42D837B222B6CE2D0036C5DD /* Dog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 		42D837BD22B6DAD50036C5DD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		42D837C822B6E80A0036C5DD /* TestLogoNavigationBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TestLogoNavigationBar.xib; path = ../../Cases/Views/TestLogoNavigationBar.xib; sourceTree = "<group>"; };
+		8838D35A2464AD8C0037A98A /* DogPatchClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogPatchClient.swift; sourceTree = "<group>"; };
 		88D8A9762464AAC20094DBB0 /* DogPatchClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogPatchClientTests.swift; sourceTree = "<group>"; };
 		9581B4AA2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+StoryboardCreatable.swift"; sourceTree = "<group>"; };
 		9581B4AB2316F32D00A78286 /* StoryboardCreatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardCreatable.swift; sourceTree = "<group>"; };
@@ -162,8 +164,8 @@
 				4213CCC1221738E40047BA3D /* AppDelegate */,
 				4213CCC2221738E90047BA3D /* Controllers */,
 				427CCADB22BC653F00F92FF7 /* Extensions */,
+				8838D3592464AD730037A98A /* Networking */,
 				4213CCC522173B3D0047BA3D /* Models */,
-				42D837B122B6CE040036C5DD /* Networking */,
 				4213CCC4221738EF0047BA3D /* Resources */,
 				4270356F22B6F3E0001080B1 /* ViewModels */,
 				4213CCC3221738ED0047BA3D /* Views */,
@@ -437,13 +439,6 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
-		42D837B122B6CE040036C5DD /* Networking */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Networking;
-			sourceTree = "<group>";
-		};
 		42D837B422B6CF5B0036C5DD /* Cases */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +473,14 @@
 			isa = PBXGroup;
 			children = (
 				88D8A9762464AAC20094DBB0 /* DogPatchClientTests.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		8838D3592464AD730037A98A /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8838D35A2464AD8C0037A98A /* DogPatchClient.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -603,6 +606,7 @@
 				42D837BE22B6DAD50036C5DD /* User.swift in Sources */,
 				42335BEF22BD166800E21A72 /* UIView+ApplyShadow.swift in Sources */,
 				9581B4B12316F35D00A78286 /* UIView+NibCreatable.swift in Sources */,
+				8838D35B2464AD8C0037A98A /* DogPatchClient.swift in Sources */,
 				42335BF822BD1D7A00E21A72 /* UITableViewCell+Identifier.swift in Sources */,
 				9581B4B22316F35D00A78286 /* NibCreatable.swift in Sources */,
 				4213CCA0221738DF0047BA3D /* AppDelegate.swift in Sources */,
@@ -829,6 +833,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 69KP7AWB28;
 				INFOPLIST_FILE = DogPatchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -851,6 +856,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 69KP7AWB28;
 				INFOPLIST_FILE = DogPatchTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
