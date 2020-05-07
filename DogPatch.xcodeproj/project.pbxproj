@@ -45,6 +45,7 @@
 		42D837BE22B6DAD50036C5DD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D837BD22B6DAD50036C5DD /* User.swift */; };
 		42D837C922B6E80A0036C5DD /* TestLogoNavigationBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42D837C822B6E80A0036C5DD /* TestLogoNavigationBar.xib */; };
 		8838D35B2464AD8C0037A98A /* DogPatchClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8838D35A2464AD8C0037A98A /* DogPatchClient.swift */; };
+		8838D35D2464B8CD0037A98A /* MockyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8838D35C2464B8CD0037A98A /* MockyAPI.swift */; };
 		88D8A9772464AAC20094DBB0 /* DogPatchClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88D8A9762464AAC20094DBB0 /* DogPatchClientTests.swift */; };
 		9581B4AC2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9581B4AA2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift */; };
 		9581B4AD2316F32D00A78286 /* StoryboardCreatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9581B4AB2316F32D00A78286 /* StoryboardCreatable.swift */; };
@@ -109,6 +110,7 @@
 		42D837BD22B6DAD50036C5DD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		42D837C822B6E80A0036C5DD /* TestLogoNavigationBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TestLogoNavigationBar.xib; path = ../../Cases/Views/TestLogoNavigationBar.xib; sourceTree = "<group>"; };
 		8838D35A2464AD8C0037A98A /* DogPatchClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogPatchClient.swift; sourceTree = "<group>"; };
+		8838D35C2464B8CD0037A98A /* MockyAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockyAPI.swift; sourceTree = "<group>"; };
 		88D8A9762464AAC20094DBB0 /* DogPatchClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DogPatchClientTests.swift; sourceTree = "<group>"; };
 		9581B4AA2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+StoryboardCreatable.swift"; sourceTree = "<group>"; };
 		9581B4AB2316F32D00A78286 /* StoryboardCreatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardCreatable.swift; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 			isa = PBXGroup;
 			children = (
 				8838D35A2464AD8C0037A98A /* DogPatchClient.swift */,
+				8838D35C2464B8CD0037A98A /* MockyAPI.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -604,6 +607,7 @@
 				9581B4AC2316F32D00A78286 /* UIViewController+StoryboardCreatable.swift in Sources */,
 				4270357322B6FA98001080B1 /* ListingCell.swift in Sources */,
 				42D837BE22B6DAD50036C5DD /* User.swift in Sources */,
+				8838D35D2464B8CD0037A98A /* MockyAPI.swift in Sources */,
 				42335BEF22BD166800E21A72 /* UIView+ApplyShadow.swift in Sources */,
 				9581B4B12316F35D00A78286 /* UIView+NibCreatable.swift in Sources */,
 				8838D35B2464AD8C0037A98A /* DogPatchClient.swift in Sources */,

@@ -29,11 +29,20 @@
 import Foundation
 
 class DogPatchClient {
+  typealias dataTaskSessionHandler = (([Dog]?, Error?) -> Void)
+  
   let baseURL: URL
   let session: URLSession
   
   init(baseURL: URL, session: URLSession) {
     self.baseURL = baseURL
     self.session = session
+  }
+  
+  func getDogs(completion: @escaping dataTaskSessionHandler) -> URLSessionDataTask {
+    let url = URL(string: "dogs", relativeTo: baseURL)!
+    let task = session.dataTask(with: url) { (data, response, error) in }
+    task.resume()
+    return task
   }
 }

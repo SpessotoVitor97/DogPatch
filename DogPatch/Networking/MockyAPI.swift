@@ -26,47 +26,30 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import XCTest
-@testable import DogPatch
+import Foundation
 
-class DogPatchClientTests: XCTestCase {
+class MockURLSession: URLSession {
+  typealias MockyDataTaskSessionHandler = ((Data?, URLResponse?, Error?) -> Void)
   
-  var sut: DogPatchClient!
-  var baseURL: URL!
-  var Mocksession: URLSession!
-  
-    override func setUp() {
-      super.setUp()
-      baseURL = URL(string: "https://example.com/api/v1/")!
-      Mocksession = MockURLSession()
-      sut = DogPatchClient(baseURL: baseURL, session: Mocksession)
-    }
+  override func dataTask(with url: URL, completionHandler: @escaping MockyDataTaskSessionHandler) -> URLSessionDataTask {
+    return MockURLSessionDataTask(url: url, completionHandler: completionHandler)
+  }
+}
 
-    override func tearDown() {
-      baseURL = nil
-      Mocksession = nil
-      sut = nil
-      super.tearDown()
-    }
+class MockURLSessionDataTask: URLSessionDataTask {
+  typealias MockyDataTaskSessionHandler = ((Data?, URLResponse?, Error?) -> Void)
   
-  func test_init_sets_baseURL() {
-    XCTAssertEqual(sut.baseURL, baseURL)
+  var completionHandler: MockyDataTaskSessionHandler
+  var url: URL
+  var calledResume = false
+  
+  init(url: URL, completionHandler: @escaping MockyDataTaskSessionHandler) {
+    self.url = url
+    self.completionHandler = completionHandler
+    super.init()
   }
   
-  func test_init_sets_session() {
-    XCTAssertEqual(sut.session, Mocksession)
-  }
-  
-  func test_getDogs_callsExpectedURL() {
-    let getDogsURL = URL(string: "dogs", relativeTo: baseURL)!
-    let mockTask = sut.getDogs { (_, _) in } as! MockURLSessionDataTask
-    
-    XCTAssertEqual(mockTask.url, getDogsURL)
-  }
-  
-  func test_getDogs_callsResumeOnTask() {
-    let mockTask = sut.getDogs { (_, _) in } as! MockURLSessionDataTask
-    
-    XCTAssertTrue(mockTask.calledResume)
+  override func resume() {
+    calledResume = true
   }
 }
