@@ -49,7 +49,8 @@ class DogPatchClientTests: XCTestCase {
       super.setUp()
       baseURL = URL(string: "https://example.com/api/v1/")!
       Mocksession = MockURLSession()
-      sut = DogPatchClient(baseURL: baseURL, session: Mocksession)
+      
+      sut = DogPatchClient(baseURL: baseURL, session: Mocksession, responseQueue: nil)
     }
 
     override func tearDown() {
@@ -152,5 +153,13 @@ class DogPatchClientTests: XCTestCase {
     let actualError = try XCTUnwrap(result.error as NSError?)
     XCTAssertEqual(actualError.domain, expectedError.domain)
     XCTAssertEqual(actualError.code, expectedError.code)
+  }
+  
+  func test_init_sets_responseQueue() {
+    let responseQueue = DispatchQueue.main
+    
+    sut = DogPatchClient(baseURL: baseURL, session: Mocksession, responseQueue: responseQueue)
+    
+    XCTAssertEqual(sut.responseQueue, responseQueue)
   }
 }

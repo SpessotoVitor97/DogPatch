@@ -34,9 +34,12 @@ class DogPatchClient {
   let baseURL: URL
   let session: URLSession
   
-  init(baseURL: URL, session: URLSession) {
+  var responseQueue: DispatchQueue? = nil
+  
+  init(baseURL: URL, session: URLSession, responseQueue: DispatchQueue?) {
     self.baseURL = baseURL
     self.session = session
+    self.responseQueue = responseQueue
   }
   
   func getDogs(completion: @escaping dataTaskSessionHandler) -> URLSessionDataTask {
