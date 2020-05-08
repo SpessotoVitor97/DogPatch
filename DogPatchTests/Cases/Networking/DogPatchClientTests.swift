@@ -36,7 +36,7 @@ class DogPatchClientTests: XCTestCase {
   //*************************************************
   var sut: DogPatchClient!
   var baseURL: URL!
-  var Mocksession: URLSession!
+  var mocksession: MockURLSession!
   
   var getDogsURL: URL {
     return URL(string: "dogs", relativeTo: baseURL)!
@@ -48,14 +48,14 @@ class DogPatchClientTests: XCTestCase {
     override func setUp() {
       super.setUp()
       baseURL = URL(string: "https://example.com/api/v1/")!
-      Mocksession = MockURLSession()
+      mocksession = MockURLSession()
       
-      sut = DogPatchClient(baseURL: baseURL, session: Mocksession, responseQueue: nil)
+      sut = DogPatchClient(baseURL: baseURL, session: mocksession, responseQueue: nil)
     }
 
     override func tearDown() {
       baseURL = nil
-      Mocksession = nil
+      mocksession = nil
       sut = nil
       super.tearDown()
     }
@@ -81,6 +81,26 @@ class DogPatchClientTests: XCTestCase {
     return (calledCompletion, receivedDogs, receivedError)
   }
   
+  func verifyGetDogsDispatchedToMain(data: Data? = nil, statusCode: Int = 200, error: Error? = nil, line: UInt = #line) {
+    mocksession.givenDispatchQueue()
+    sut = DogPatchClient(baseURL: baseURL, session: mocksession, responseQueue: .main)
+    
+    let expectation = self.expectation(description: "Completion wasn't called")
+    
+    var thread: Thread!
+    let mockTask = sut.getDogs { (dogs, error) in
+      thread = Thread.current
+      expectation.fulfill()
+    } as! MockURLSessionDataTask
+    
+    let response = HTTPURLResponse(url: getDogsURL, statusCode: statusCode, httpVersion: nil, headerFields: nil)
+    mockTask.completionHandler(data, response, error)
+    
+    waitForExpectations(timeout: 0.2) { (_) in
+      XCTAssertTrue(thread.isMainThread, line: line)
+    }
+  }
+  
   //*************************************************
   // MARK: - Test cases
   //*************************************************
@@ -89,7 +109,7 @@ class DogPatchClientTests: XCTestCase {
   }
   
   func test_init_sets_session() {
-    XCTAssertEqual(sut.session, Mocksession)
+    XCTAssertEqual(sut.session, mocksession)
   }
   
   func test_getDogs_callsExpectedURL() {
@@ -158,8 +178,30 @@ class DogPatchClientTests: XCTestCase {
   func test_init_sets_responseQueue() {
     let responseQueue = DispatchQueue.main
     
-    sut = DogPatchClient(baseURL: baseURL, session: Mocksession, responseQueue: responseQueue)
+    sut = DogPatchClient(baseURL: baseURL, session: mocksession, responseQueue: responseQueue)
     
     XCTAssertEqual(sut.responseQueue, responseQueue)
+  }
+  
+  func test_getDogs_givenHTTPStatusError_dispatchesToResponseQueue() {
+    verifyGetDogsDispatchedToMain(statusCode: 500)
+    }
+  
+  func test_getDogs_givenError_dispatchesToResponseQueue() {
+    let error = NSError(domain: "com.DogPatchTest", code: 42)
+    
+    verifyGetDogsDispatchedToMain(error: error)
+  }
+  
+  func test_getDogs_givenGoodResponse_dispatchesToResponseQueue() throws {
+    let data = try Data.fromJSON(fileName: "GET_Dogs_Response")
+    
+    verifyGetDogsDispatchedToMain(data: data)
+  }
+  
+  func test_getDog_givenInvalidResponse_dispatchesToResponseQueue() throws {
+    let data = try Data.fromJSON(fileName: "GET_Dogs_MissingValuesResponse")
+    
+    verifyGetDogsDispatchedToMain(data: data)
   }
 }

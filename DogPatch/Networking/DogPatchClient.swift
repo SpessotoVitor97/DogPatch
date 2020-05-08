@@ -30,6 +30,7 @@ import Foundation
 
 class DogPatchClient {
   typealias dataTaskSessionHandler = (([Dog]?, Error?) -> Void)
+  typealias dispatchResultHandler<Type> = ((Type?, Error?) -> Void)
   
   let baseURL: URL
   let session: URLSession
@@ -44,20 +45,33 @@ class DogPatchClient {
   
   func getDogs(completion: @escaping dataTaskSessionHandler) -> URLSessionDataTask {
     let url = URL(string: "dogs", relativeTo: baseURL)!
-    let task = session.dataTask(with: url) { (data, response, error) in
+    let task = session.dataTask(with: url) { [weak self] data, response, error in
+      guard let self = self else { return }
       guard let response = response as? HTTPURLResponse, response.statusCode == 200, error == nil, let data = data  else {
-        completion(nil, error)
+        self.dispatchResult(error: error, completion: completion)
         return
       }
       let decoder = JSONDecoder()
       do {
         let dogs = try decoder.decode([Dog].self, from: data)
-        completion(dogs, nil)
+        self.dispatchResult(models: dogs, completion: completion)
       } catch {
-        completion(nil, error)
+        self.dispatchResult(error: error, completion: completion)
       }
     }
     task.resume()
     return task
+  }
+}
+
+extension DogPatchClient {
+  private func dispatchResult<Type>(models: Type? = nil, error: Error? = nil, completion: @escaping dispatchResultHandler<Type>) {
+    guard let responseQueue = responseQueue else {
+      completion(models, error)
+      return
+    }
+    responseQueue.async {
+      completion(models, error)
+    }
   }
 }
