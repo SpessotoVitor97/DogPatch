@@ -31,10 +31,20 @@ import XCTest
 
 class DogPatchClientTests: XCTestCase {
   
+  //*************************************************
+  // MARK: - Properties
+  //*************************************************
   var sut: DogPatchClient!
   var baseURL: URL!
   var Mocksession: URLSession!
   
+  var getDogsURL: URL {
+    return URL(string: "dogs", relativeTo: baseURL)!
+  }
+  
+  //*************************************************
+  // MARK: - Lifecycle
+  //*************************************************
     override func setUp() {
       super.setUp()
       baseURL = URL(string: "https://example.com/api/v1/")!
@@ -49,6 +59,30 @@ class DogPatchClientTests: XCTestCase {
       super.tearDown()
     }
   
+  //*************************************************
+  // MARK: - Helper methods
+  //*************************************************
+  func getDogsHelper(data: Data? = nil, statusCode: Int = 200, error: Error? = nil) -> (calledCompletion: Bool, dogs: [Dog]?, error: Error?) {
+    
+    let response = HTTPURLResponse(url: getDogsURL, statusCode: statusCode, httpVersion: nil, headerFields: nil)
+    
+    var calledCompletion = false
+    var receivedDogs: [Dog]? = nil
+    var receivedError: Error? = nil
+    
+    let mockTask = sut.getDogs { (dogs, error) in
+      calledCompletion = true
+      receivedDogs = dogs
+      receivedError = error as NSError?
+    } as! MockURLSessionDataTask
+    
+    mockTask.completionHandler(data, response, error)
+    return (calledCompletion, receivedDogs, receivedError)
+  }
+  
+  //*************************************************
+  // MARK: - Test cases
+  //*************************************************
   func test_init_sets_baseURL() {
     XCTAssertEqual(sut.baseURL, baseURL)
   }
@@ -58,7 +92,6 @@ class DogPatchClientTests: XCTestCase {
   }
   
   func test_getDogs_callsExpectedURL() {
-    let getDogsURL = URL(string: "dogs", relativeTo: baseURL)!
     let mockTask = sut.getDogs { (_, _) in } as! MockURLSessionDataTask
     
     XCTAssertEqual(mockTask.url, getDogsURL)
@@ -68,5 +101,24 @@ class DogPatchClientTests: XCTestCase {
     let mockTask = sut.getDogs { (_, _) in } as! MockURLSessionDataTask
     
     XCTAssertTrue(mockTask.calledResume)
+  }
+  
+  func test_getDogs_givenResponseStatusCode500_callsCompletion() {
+    let result = getDogsHelper(statusCode: 500)
+    
+    XCTAssertTrue(result.calledCompletion)
+    XCTAssertNil(result.dogs)
+    XCTAssertNil(result.error)
+  }
+  
+  func test_getDogs_givenError_callsCompletionWithError() throws {
+    let expectedError = NSError(domain: "com.DogPatchTests", code: 42)
+    let result = getDogsHelper(error: expectedError)
+    
+    XCTAssertTrue(result.calledCompletion)
+    XCTAssertNil(result.dogs)
+    
+    let actualError = try XCTUnwrap(result.error as NSError?)
+    XCTAssertEqual(actualError, expectedError)
   }
 }
