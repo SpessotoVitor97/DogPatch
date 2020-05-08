@@ -31,8 +31,14 @@ import Foundation
 class MockURLSession: URLSession {
   typealias MockyDataTaskSessionHandler = ((Data?, URLResponse?, Error?) -> Void)
   
+  var queue: DispatchQueue? = nil
+  
+  func givenDispatchQueue() {
+    queue = DispatchQueue(label: "com.DogPatchTests.MockSession")
+  }
+  
   override func dataTask(with url: URL, completionHandler: @escaping MockyDataTaskSessionHandler) -> URLSessionDataTask {
-    return MockURLSessionDataTask(url: url, completionHandler: completionHandler)
+    return MockURLSessionDataTask(url: url, queue: queue, completionHandler: completionHandler)
   }
 }
 
@@ -42,10 +48,19 @@ class MockURLSessionDataTask: URLSessionDataTask {
   var completionHandler: MockyDataTaskSessionHandler
   var url: URL
   var calledResume = false
+  var queue: DispatchQueue? = nil
   
-  init(url: URL, completionHandler: @escaping MockyDataTaskSessionHandler) {
+  init(url: URL, queue: DispatchQueue?, completionHandler: @escaping MockyDataTaskSessionHandler) {
     self.url = url
-    self.completionHandler = completionHandler
+    if let queue = queue {
+      self.completionHandler = { data, response, error in
+        queue.async() {
+          completionHandler(data, response, error)
+        }
+      }
+    } else {
+      self.completionHandler = completionHandler
+    }
     super.init()
   }
   
