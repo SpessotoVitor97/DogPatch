@@ -121,4 +121,36 @@ class DogPatchClientTests: XCTestCase {
     let actualError = try XCTUnwrap(result.error as NSError?)
     XCTAssertEqual(actualError, expectedError)
   }
+  
+  func test_getDogs_givenValidJSON_callsCompletionWithDogs() throws {
+    let data = try Data.fromJSON(fileName: "GET_Dogs_Response")
+    let decoder = JSONDecoder()
+    let dogs = try decoder.decode([Dog].self, from: data)
+    let result = getDogsHelper(data: data)
+    
+    XCTAssertTrue(result.calledCompletion)
+    XCTAssertEqual(result.dogs, dogs)
+    XCTAssertNil(result.error)
+  }
+  
+  func test_getDogs_givenInvalidJSON_callsCompletionWithError() throws {
+    let data = try Data.fromJSON(fileName: "GET_Dogs_MissingValuesResponse")
+    var expectedError: NSError!
+    let decoder = JSONDecoder()
+    
+    do {
+      _ = try decoder.decode([Dog].self, from: data)
+    } catch {
+      expectedError = error as NSError
+    }
+    
+    let result = getDogsHelper(data: data)
+    
+    XCTAssertTrue(result.calledCompletion)
+    XCTAssertNil(result.dogs)
+    
+    let actualError = try XCTUnwrap(result.error as NSError?)
+    XCTAssertEqual(actualError.domain, expectedError.domain)
+    XCTAssertEqual(actualError.code, expectedError.code)
+  }
 }

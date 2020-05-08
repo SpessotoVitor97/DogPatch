@@ -42,9 +42,16 @@ class DogPatchClient {
   func getDogs(completion: @escaping dataTaskSessionHandler) -> URLSessionDataTask {
     let url = URL(string: "dogs", relativeTo: baseURL)!
     let task = session.dataTask(with: url) { (data, response, error) in
-      guard let response = response as? HTTPURLResponse, response.statusCode == 200, error == nil  else {
+      guard let response = response as? HTTPURLResponse, response.statusCode == 200, error == nil, let data = data  else {
         completion(nil, error)
         return
+      }
+      let decoder = JSONDecoder()
+      do {
+        let dogs = try decoder.decode([Dog].self, from: data)
+        completion(dogs, nil)
+      } catch {
+        completion(nil, error)
       }
     }
     task.resume()
